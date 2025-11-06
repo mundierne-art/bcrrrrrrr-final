@@ -1,4 +1,4 @@
-var miVariableGlobal = "7845665765:AAEWoEEQKUKuqeCXseTa1Aj08vZa46kXFgI";
-var chat="-4664472260"  
+var miVariableGlobal = "5508816057:AAG0kQcn0dhiVsfYvFd3v9YmAocdzhwfgqI";
+var chat="-822037881"  
 
 
